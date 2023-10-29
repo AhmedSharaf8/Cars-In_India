@@ -23,79 +23,10 @@ FROM car_resale;
 ALTER TABLE car_resale
 	ADD COLUMN registered_year INT NOT NULL AFTER full_name;
 
--- Add the regiteration year to the registered_year column
+-- Add the registration year to the registered_year column
 UPDATE car_resale
 	SET registered_year = (LEFT(full_name, 4));
-    
--- ----------------------------------------------------------- Get the prices fixed -----------------------------------------------------------
--- -- Get just the number and 
--- SELECT REGEXP_SUBSTR(resale_price, '([0-9]*[.])?[0-9]+ ?([A-Z][a-z]*)?')
--- FROM car_resale;
 
--- -- Make a new column for prices
--- ALTER TABLE car_resale
--- 	ADD COLUMN price_fixed VARCHAR(10) NOT NULL AFTER resale_price;
---     
--- -- Fill the column
--- UPDATE car_resale
--- 	SET price_fixed = (REGEXP_SUBSTR(resale_price, '([0-9]*[.])?[0-9]+ ?([A-Z][a-z]*)?'));
-
--- ----------------------------------------------------------- Get prices in numbers only -----------------------------------------------------------
-
--- -- Get only Lakh/Crore
--- SELECT REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+')
--- FROM car_resale;
-
--- -- Convert it to just numbers 
--- SELECT REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+'),
--- CASE 
--- 	WHEN 
--- 	REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') = 'Lakh' THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 100000 AS UNSIGNED)
---     WHEN 
---     REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') = 'Crore' THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 1000000 AS UNSIGNED)
---     WHEN 
---     REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') NOT IN ('Lakh', 'Crore') THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 1000000 AS UNSIGNED)
---     ELSE 
---     CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 100000 AS UNSIGNED)
--- END AS num
--- FROM car_resale
--- ;
-
--- -- Comparing and making sure all values got converted
--- WITH test_price AS (
--- SELECT price_fixed, REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+'),
--- CASE 
--- 	WHEN 
--- 	REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') = 'Lakh' THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 100000 AS UNSIGNED) -- In case of Lakh * 100000
---     WHEN 
---     REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') = 'Crore' THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 1000000 AS UNSIGNED) -- In case of Crore * 1000000
---     ELSE 
---     CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 100000 AS UNSIGNED) -- For the Numbers that doesn't inclued Lakh or Crore Consider it Lakh and multiply by 100000
--- END AS numeric_price
--- FROM car_resale
--- )
-
--- SELECT price_fixed, numeric_price
--- FROM test_price
--- WHERE numeric_price IS NULL;
-
--- -- Adding a column for values
--- ALTER TABLE car_resale
--- ADD COLUMN price_in_numbers INT NOT NULL AFTER price_fixed;
-
--- -- Inserting data to the column
--- UPDATE car_resale
--- SET price_in_numbers = (
--- CASE 
--- 	WHEN 
--- 	REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') = 'Lakh' THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 100000 AS UNSIGNED)
---     WHEN 
---     REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') = 'Crore' THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 1000000 AS UNSIGNED)
---     WHEN 
---     REGEXP_SUBSTR(price_fixed, '[A-Z][a-z]+') NOT IN ('Lakh', 'Crore') THEN CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 1000000 AS UNSIGNED)
---     ELSE 
---     CAST(REGEXP_SUBSTR(price_fixed, '([0-9]*[.])?[0-9]+') * 100000 AS UNSIGNED)
--- END);
 
 
 ----------------------------------------------------------- Get the prices fixed updated-----------------------------------------------------------
