@@ -23,11 +23,10 @@ FROM car_resale;
 ALTER TABLE car_resale
 	ADD COLUMN registered_year INT NOT NULL AFTER full_name;
 
--- Add the registration year to the registered_year column
+-- Add the regiteration year to the registered_year column
 UPDATE car_resale
 	SET registered_year = (LEFT(full_name, 4));
-
-
+    
 
 ----------------------------------------------------------- Get the prices fixed updated-----------------------------------------------------------
 -- Get just the number and Lakh or Crore
@@ -234,19 +233,6 @@ SELECT full_name, registered_year, ROW_NUMBER() over(PARTITION BY full_name) car
 FROM car_resale c
 ORDER BY cars_sold DESC;
 
--- WITH max_sold AS (SELECT c.i, c.full_name, c.registered_year, ROW_NUMBER() over(PARTITION BY full_name) cars_sold
--- FROM car_resale c
--- ORDER BY cars_sold DESC)
-
--- SELECT registered_year, MAX(cars_sold) number_sold, MAX(i)
--- FROM max_sold
--- GROUP BY registered_year
--- ORDER BY number_sold DESC;
-
--- SELECT c.i, c.full_name, c.registered_year, ROW_NUMBER() over(PARTITION BY full_name) cars_sold
--- FROM car_resale c
--- ORDER BY cars_sold DESC;
-
 -- Temporary table for the the most sold cars for each registered years and THE index FOR EACH CAR (so we can find the car later)
 CREATE TEMPORARY TABLE max_sold
 SELECT registered_year, MAX(cars_sold) number_sold, MAX(i) max_i
@@ -317,4 +303,3 @@ FROM car_resale
 GROUP BY registered_year, transimssion
 ORDER BY registered_year DESC;
 
--------------------------------------------------------------- Adding States -----------------------------------------------------------
